@@ -1,11 +1,13 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import getOpportunities from '@salesforce/apex/AccountOpportunitiesController.getOpportunities';
-import { refreshApex } from '@salesforce/apex';
 import deleteOpportunity from '@salesforce/apex/AccountOpportunitiesController.deleteOpportunity';
 import { getRecord } from 'lightning/uiRecordApi';
 import Id from '@salesforce/user/Id';
 import PROFILE_NAME_FIELD from '@salesforce/schema/User.Profile.Name';
-import { NavigationMixin } from 'lightning/navigation';
+import { refreshApex } from 'lightning/refresh';
+import { RefreshEvent } from 'lightning/refresh';
+import {  getRecordNotifyChange } from 'lightning/uiRecordApi';
+import {  ShowToastEvent  } from 'lightning/platformShowToastEvent';
   
 export default class AccountOpportunitiesViewer extends LightningElement {
   @api recordId;
@@ -16,6 +18,7 @@ export default class AccountOpportunitiesViewer extends LightningElement {
   @track isStockBelowZero = false;
   @track userProfileName;
   userId = Id;
+  draftValues=[];
   
 
   @wire(getRecord, { recordId: '$userId', fields: [PROFILE_NAME_FIELD] })
@@ -117,7 +120,7 @@ configureColumns(profileName) {
     try {
         if (data) {
         
-
+          this.opportunities = data;
           const formattedData = data.map(item => {
               const stockAfterOrder = item.Product2 ? item.Product2.QuantityInStock__c - item.Quantity : null;
               const stockStyle = stockAfterOrder < 0 
@@ -196,21 +199,41 @@ configureColumns(profileName) {
         await deleteOpportunity({ opportunityId: row.Id });
 
         // Mettre à jour la liste des opportunités dans le composant
-        this.opportunities = this.opportunities.filter(opp => opp.Id !== row.Id);
-        
-        this[NavigationMixin.Navigate.Product2]({
-          type: 'standard__recordPage',
-          attributes: {
-              recordId: this.recordId,
-              objectApiName: 'Opportunity', // Remplace par l'objet spécifique
-              actionName: 'view',
-          },
-      });
+        this.opportunities = this.opportunities.filter(opp => opp.Id !== row.Id);   
+
+        this.showToast('Succès', 'Avant Success', 'success');
+        console.log('Toast Avant Success');
+        console.log('this.wiredOpportunitiesResult = ' + this.wiredOpportunitiesResult);
+     
+         //await refreshApex(this.wiredOpportunitiesResult);
+        // Afficher un toast de succès
+        this.showToast('Succès', 'Opportunité supprimée avec succès.', 'success');
+        console.log('Toast de succès affiché.');
+
+        console.log('recordId == :'+ this.recordId);
+        // Notifier les autres composants de la modification de l'opportunité
+        //getRecordNotifyChange([{recordId: this.recordId}]);
+        getRecordNotifyChange([{ recordId: row.Id }]);
+        console.log('Notification envoyée.');
+        // Afficher un toast de succès
+        this.showToast('Succès', 'Opportunité supprimée avec succès.', 'success');
+
     
     } catch (error) {
         console.error('Erreur lors de la suppression de l’opportunité :', error);
+        console.error('Erreur = :'+ error);
     }
 }
+
+showToast(title, message, variant) {
+  const event = new ShowToastEvent({
+      title: title,
+      message: message,
+      variant: variant,
+  });
+  this.dispatchEvent(event);
+}
+
 
 
 
