@@ -1,9 +1,9 @@
 public with sharing class AccountOpportunitiesController {
   @AuraEnabled(Cacheable=true)
-  public static List<OpportunityLineItem> getOpportunities(Id accountId) {
+  public static List<OpportunityLineItem> getOpportunities(Id OpportunityId) {
     try {
     
-      return OpportunityLineItemSelector.getProductByOpportunityID(accountId);
+      return OpportunityLineItemSelector.getProductByOpportunityID(OpportunityId);
     } catch (Exception e) { 
      
       // Lance une exception gérée pour que le LWC puisse comprendre l'erreur
