@@ -3,39 +3,42 @@
     title="Opportunités de produits"
     icon-name="standard:opportunity"
   >
-    <div class="slds-max-large-size_xx-large">     
+    <div class="slds-max-large-size_xx-large">
       <template if:true={isLoading}>
         <lightning-spinner alternative-text="Chargement..."></lightning-spinner>
       </template>
-      <template if:true={showQuantiteError}> 
+      <template if:true={showQuantiteError}>
         <div class="slds-clearfix">
-       
-          <div class="slds-notify slds-notify_alert slds-theme_warning slds-alert_warning slds-grid slds-wrap" >         
-          <div  class="slds-col slds-size_1-of-1 slds-p-around_small slds-text-align_left" >
-            Vous avez au moins une ligne avec un problème de quantité, veuillez supprimer cette ligne ou réduire sa quantité. 
-              <br> Si vous avez absolument besoin de plus de produit, veuillez contacter votre administrateur système.           
-            </div>   
-                    
-           </div>
-       
+          <div
+            class="slds-notify slds-notify_alert slds-theme_warning slds-alert_warning slds-grid slds-wrap"
+          >
+            <div
+              class="slds-col slds-size_1-of-1 slds-p-around_small slds-text-align_left"
+            >
+              Vous avez au moins une ligne avec un problème de quantité,
+              veuillez supprimer cette ligne ou réduire sa quantité.
+              <br />
+              Si vous avez absolument besoin de plus de produit, veuillez
+              contacter votre administrateur système.
             </div>
+          </div>
+        </div>
       </template>
       <template if:true={showTable}>
         <lightning-datatable
           data={opportunities}
-          columns={COLUMNS}
+          columns={columns}
           key-field="Id"
           onrowaction={handleRowAction}
-        >       
-        </lightning-datatable>      
-          
+        >
+        </lightning-datatable>
       </template>
       <template if:false={showTable}>
         <p>Vous n'avez aucune ligne de produits pour le moment.</p>
         <p>1. Veuillez tout d'abord selectionner un Catalogue (Pricebook)</p>
         <p>2. Selectionnez ensuite les produits à ajouter.</p>
       </template>
-      
+
       <template if:true={error}>
         <template if:false={isLoading}>
           <div
@@ -47,7 +50,6 @@
           </div>
         </template>
       </template>
-      
     </div>
   </lightning-card>
 </template>
