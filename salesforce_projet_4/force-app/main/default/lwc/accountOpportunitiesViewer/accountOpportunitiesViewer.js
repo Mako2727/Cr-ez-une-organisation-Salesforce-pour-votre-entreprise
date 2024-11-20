@@ -9,7 +9,7 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 export default class AccountOpportunitiesViewer extends LightningElement {
   @api recordId;
-  @track opportunities;
+  @track opportunitiesListItem ;
   @track error = {};
   wiredOpportunitiesResult;
   wiredProfileResult;
@@ -20,6 +20,7 @@ export default class AccountOpportunitiesViewer extends LightningElement {
 
   @wire(getRecord, { recordId: "$userId", fields: [PROFILE_NAME_FIELD] })
   wiredUserRecord({ error, data }) {
+   
     if (data) {
       this.userProfileName = data.fields.Profile.value.fields.Name.value;
       console.log("this.userProfileName :", this.userProfileName);
@@ -33,8 +34,9 @@ export default class AccountOpportunitiesViewer extends LightningElement {
 
   get columns() {
     // Définir les colonnes en fonction du profil
+    console.log("this.userProfileName = "+ this.userProfileName);
     if (this.userProfileName === "System Administrator") {
-      return [
+      AccountOpportunitiesViewer.columns= [
         { label: "Nom Produit", fieldName: "ProductName", type: "Text" },
         {
           label: "Quantité",
@@ -81,7 +83,7 @@ export default class AccountOpportunitiesViewer extends LightningElement {
         }
       ];
     } else {
-      return [
+      AccountOpportunitiesViewer.columns= [
         { label: "Nom Produit", fieldName: "ProductName", type: "Text" },
         {
           label: "Quantité",
@@ -114,6 +116,8 @@ export default class AccountOpportunitiesViewer extends LightningElement {
         }
       ];
     }
+    console.log("columns opportunity=" , AccountOpportunitiesViewer.columns);
+    return AccountOpportunitiesViewer.columns;
   }
 
   @wire(getOpportunities, { opportunityId: "$recordId" })
@@ -127,7 +131,6 @@ export default class AccountOpportunitiesViewer extends LightningElement {
     try {
       if (data) {
         console.log("data=", data);
-        this.opportunities = data;
         const formattedData = data.map((item) => {
           const stockAfterOrder = item.Product2
             ? item.Product2.QuantityInStock__c - item.Quantity
@@ -155,25 +158,27 @@ export default class AccountOpportunitiesViewer extends LightningElement {
           };
         });
 
-        this.opportunities = formattedData;
+        this.opportunitiesListItem = formattedData;
         this.error = undefined;
         this.isLoading = false; // Arrête le chargement
-        return this.opportunities;
+       
       } else if (error) {
         this.error = error;
-        this.opportunities = undefined;
+        this.opportunitiesListItem = undefined;
         this.isLoading = false; // Arrête le chargement
+       
       }
     } catch (e) {
       console.error("Une erreur s'est produite :", e);
     }
+     return this.opportunitiesListItem;
   }
 
   get showTable() {
     return (
       this.userProfileName &&
-      this.opportunities &&
-      this.opportunities.length > 0
+      this.opportunitiesListItem &&
+      this.opportunitiesListItem.length > 0
     );
   }
 
@@ -201,7 +206,7 @@ export default class AccountOpportunitiesViewer extends LightningElement {
       console.log("row.Id :" + row.Id);
       await deleteOpportunity({ opportunityId: row.Id });
       // Mettre à jour la liste des opportunités dans le composant
-      this.opportunities = this.opportunities.filter(
+      this.opportunitiesListItem = this.opportunitiesListItem.filter(
         (opp) => opp.Id !== row.Id
       );
       // Afficher un toast de succès
@@ -228,7 +233,7 @@ export default class AccountOpportunitiesViewer extends LightningElement {
   viewProduct(row) {
     // Logique pour afficher le détail du produit
     console.log(`Voici l id du produit ${row.Id} `);
-    const productId = row.Id; // Obtenez l'ID du produit
+    //const productId = row.Id; // Obtenez l'ID du produit
     const productUrl = `/lightning/r/OpportunityLineItem/${row.Id}/view`; // Générer l'URL de la page de détails
     console.log(`Voici l url  ` + productUrl);
     window.open(productUrl, "_blank"); // Ouvrir dans un nouvel onglet
