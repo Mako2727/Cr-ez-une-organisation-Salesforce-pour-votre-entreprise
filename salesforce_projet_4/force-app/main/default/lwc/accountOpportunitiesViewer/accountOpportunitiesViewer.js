@@ -6,23 +6,24 @@ import Id from "@salesforce/user/Id";
 import PROFILE_NAME_FIELD from "@salesforce/schema/User.Profile.Name";
 import { RefreshEvent } from "lightning/refresh";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import Delete from '@salesforce/label/c.Delete';
-import Product_Name from '@salesforce/label/c.Product_Name';
-import Quantity from '@salesforce/label/c.Quantity';
-import Quantity_in_stock from '@salesforce/label/c.Quantity_in_stock';
-import Quantity_probleme_delete from '@salesforce/label/c.Quantity_probleme_delete';
-import Quantity_probleme_delete2 from '@salesforce/label/c.Quantity_probleme_delete2';
-import See_product from '@salesforce/label/c.See_product';
-import Total_Price from '@salesforce/label/c.Total_Price';
-import Unit_Price from '@salesforce/label/c.Unit_Price';
-import 	Success_deleted_opportunitie from '@salesforce/label/c.Success_deleted_opportunitie';
-import Opportunity_products from '@salesforce/label/c.Opportunity_products';
-import 	Warning_no_product from '@salesforce/label/c.Warning_no_product';
-
+import Delete from "@salesforce/label/c.Delete";
+import Product_Name from "@salesforce/label/c.Product_Name";
+import Quantity from "@salesforce/label/c.Quantity";
+import Quantity_in_stock from "@salesforce/label/c.Quantity_in_stock";
+import Quantity_probleme_delete from "@salesforce/label/c.Quantity_probleme_delete";
+import Quantity_probleme_delete2 from "@salesforce/label/c.Quantity_probleme_delete2";
+import See_product from "@salesforce/label/c.See_product";
+import Total_Price from "@salesforce/label/c.Total_Price";
+import Unit_Price from "@salesforce/label/c.Unit_Price";
+import Success_deleted_opportunitie from "@salesforce/label/c.Success_deleted_opportunitie";
+import Opportunity_products from "@salesforce/label/c.Opportunity_products";
+import Warning_no_product from "@salesforce/label/c.Warning_no_product";
+import Warning_no_product2 from "@salesforce/label/c.Warning_no_product2";
+import Warning_no_product3 from "@salesforce/label/c.Warning_no_product3";
 
 export default class AccountOpportunitiesViewer extends LightningElement {
   @api recordId;
-  @track opportunitiesListItem ;
+  @track opportunitiesListItem;
   @track error = {};
   wiredOpportunitiesResult;
   wiredProfileResult;
@@ -33,16 +34,15 @@ export default class AccountOpportunitiesViewer extends LightningElement {
 
   labels = {
     labelsQuantityProblem1: Quantity_probleme_delete,
-    labelsQuantityProblem2: Quantity_probleme_delete2,
-    labelsWarningProduct:Warning_no_product,
-    Opportunity_products:Opportunity_products
-};
-
-
+    labelsQuantityProblem2: Quantity_probleme_delete2,    
+    Opportunity_products: Opportunity_products,
+    labelsWarningProduct: Warning_no_product,
+    labelsWarningProduct2: Warning_no_product2,
+    labelsWarningProduct3: Warning_no_product3
+  };
 
   @wire(getRecord, { recordId: "$userId", fields: [PROFILE_NAME_FIELD] })
   wiredUserRecord({ error, data }) {
-   
     if (data) {
       this.userProfileName = data.fields.Profile.value.fields.Name.value;
       console.log("this.Opportunity_products :", this.Opportunity_products);
@@ -57,9 +57,12 @@ export default class AccountOpportunitiesViewer extends LightningElement {
 
   get columns() {
     // Définir les colonnes en fonction du profil
-    console.log("this.userProfileName = "+ this.userProfileName);
-    if ((this.userProfileName === "System Administrator")|| (this.userProfileName === "Administrateur système")) {
-      AccountOpportunitiesViewer.columns= [
+    console.log("this.userProfileName = " + this.userProfileName);
+    if (
+      this.userProfileName === "System Administrator" ||
+      this.userProfileName === "Administrateur système"
+    ) {
+      AccountOpportunitiesViewer.columns = [
         { label: Product_Name, fieldName: "ProductName", type: "Text" },
         {
           label: Quantity,
@@ -106,7 +109,7 @@ export default class AccountOpportunitiesViewer extends LightningElement {
         }
       ];
     } else {
-      AccountOpportunitiesViewer.columns= [
+      AccountOpportunitiesViewer.columns = [
         { label: Product_Name, fieldName: "ProductName", type: "Text" },
         {
           label: Quantity,
@@ -139,13 +142,13 @@ export default class AccountOpportunitiesViewer extends LightningElement {
         }
       ];
     }
-    console.log("columns opportunity=" , AccountOpportunitiesViewer.columns);
+    console.log("columns opportunity=", AccountOpportunitiesViewer.columns);
     return AccountOpportunitiesViewer.columns;
   }
 
   @wire(getOpportunities, { opportunityId: "$recordId" })
   wiredOpportunities(result) {
-    console.log("Quantity_probleme_delete2 : "+ Quantity_probleme_delete2);
+    console.log("Quantity_probleme_delete2 : " + Quantity_probleme_delete2);
     console.log("OpportunityId=" + this.recordId);
     this.wiredOpportunitiesResult = result; // Stocke le résultat
 
@@ -185,18 +188,16 @@ export default class AccountOpportunitiesViewer extends LightningElement {
         this.opportunitiesListItem = formattedData;
         this.error = undefined;
         this.isLoading = false; // Arrête le chargement
-       
       } else if (error) {
         this.error = error;
         this.opportunitiesListItem = undefined;
         this.isLoading = false; // Arrête le chargement
-       
       }
     } catch (e) {
       console.error("Une erreur s'est produite :", e);
     }
-    
-     return this.opportunitiesListItem;
+
+    return this.opportunitiesListItem;
   }
 
   get showTable() {

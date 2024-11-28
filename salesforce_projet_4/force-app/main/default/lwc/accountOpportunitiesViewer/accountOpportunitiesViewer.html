@@ -15,7 +15,7 @@
             <div
               class="slds-col slds-size_1-of-1 slds-p-around_small slds-text-align_left"
             >
-            {labels.labelsQuantityProblem1}
+              {labels.labelsQuantityProblem1}
               <br />
               {labels.labelsQuantityProblem2}
             </div>
@@ -31,8 +31,12 @@
         >
         </lightning-datatable>
       </template>
-      <template if:false={showTable}>
-        {labels.labelsWarningProduct}
+      <template if:false={showTable}> 
+        {labels.labelsWarningProduct} 
+      <br/>
+      {labels.labelsWarningProduct2} 
+      <br/>
+      {labels.labelsWarningProduct3} 
       </template>
 
       <template if:true={error}>
