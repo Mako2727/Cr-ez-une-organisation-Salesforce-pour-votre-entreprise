@@ -32,5 +32,21 @@
         <members>*</members>
         <name>StaticResource</name>
     </types>
+     <types>
+    <members>*</members>
+    <name>CustomLabel</name>
+  </types>
+  <types>
+    <members>fr</members> <!-- Spécifie la langue française -->
+    <name>Translations</name>
+  </types>
+    <types>
+    <members>Trigger_Sage_v2</members>
+    <name>Flow</name>
+  </types>
+    <types>
+    <members>OpportunityLineItem.SockAfterSale__c</members>
+    <name>CustomField</name>
+  </types>
     <version>59.0</version>
 </Package>
