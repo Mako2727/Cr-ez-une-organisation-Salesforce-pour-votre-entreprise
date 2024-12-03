@@ -2,10 +2,11 @@
   <lightning-card
     title={labels.Opportunity_products}
     icon-name="standard:opportunity"
+    alternative-text={labels.Product_icon}
   >
     <div class="slds-max-large-size_xx-large">
       <template if:true={isLoading}>
-        <lightning-spinner alternative-text="Chargement..."></lightning-spinner>
+        <lightning-spinner alternative-text={labels.labelsLoading}></lightning-spinner>
       </template>
       <template if:true={showQuantiteError}>
         <div class="slds-clearfix">

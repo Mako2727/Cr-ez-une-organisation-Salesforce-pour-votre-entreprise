@@ -20,6 +20,9 @@ import Opportunity_products from "@salesforce/label/c.Opportunity_products";
 import Warning_no_product from "@salesforce/label/c.Warning_no_product";
 import Warning_no_product2 from "@salesforce/label/c.Warning_no_product2";
 import Warning_no_product3 from "@salesforce/label/c.Warning_no_product3";
+import Loading from "@salesforce/label/c.Loading";
+import Product_icon from "@salesforce/label/c.Product_icon";
+
 
 export default class AccountOpportunitiesViewer extends LightningElement {
   @api recordId;
@@ -38,10 +41,12 @@ export default class AccountOpportunitiesViewer extends LightningElement {
     Opportunity_products: Opportunity_products,
     labelsWarningProduct: Warning_no_product,
     labelsWarningProduct2: Warning_no_product2,
-    labelsWarningProduct3: Warning_no_product3
+    labelsWarningProduct3: Warning_no_product3,
+    labelsLoading: Loading,
+    labelsProduct_icon: Product_icon
   };
 
-  @wire(getRecord, { recordId: "$userId", fields: [PROFILE_NAME_FIELD] })
+  @wire(getRecord, { recordId: "$userId", fields: [PROFILE_NAME_FIELD] })//récupération du profil de la personne connecté
   wiredUserRecord({ error, data }) {
     if (data) {
       this.userProfileName = data.fields.Profile.value.fields.Name.value;
@@ -146,10 +151,9 @@ export default class AccountOpportunitiesViewer extends LightningElement {
     return AccountOpportunitiesViewer.columns;
   }
 
-  @wire(getOpportunities, { opportunityId: "$recordId" })
+  @wire(getOpportunities, { opportunityId: "$recordId" })//récupére l opportunitée en fonction de l id
   wiredOpportunities(result) {
-    console.log("Quantity_probleme_delete2 : " + Quantity_probleme_delete2);
-    console.log("OpportunityId=" + this.recordId);
+    
     this.wiredOpportunitiesResult = result; // Stocke le résultat
 
     const { data, error } = result;
@@ -214,7 +218,7 @@ export default class AccountOpportunitiesViewer extends LightningElement {
     return test;
   }
 
-  handleRowAction(event) {
+  handleRowAction(event) {//récupére l evenement quand on clique sur le tableau soit delete soit view
     const actionName = event.detail.action.name;
     const row = event.detail.row;
     console.log("actionName : " + actionName);
@@ -245,7 +249,7 @@ export default class AccountOpportunitiesViewer extends LightningElement {
     }
   }
 
-  showToast(title, message, variant) {
+  showToast(title, message, variant) {//affiche un message Toast
     const event = new ShowToastEvent({
       title: title,
       message: message,
@@ -257,7 +261,6 @@ export default class AccountOpportunitiesViewer extends LightningElement {
   viewProduct(row) {
     // Logique pour afficher le détail du produit
     console.log(`Voici l id du produit ${row.Id} `);
-    //const productId = row.Id; // Obtenez l'ID du produit
     const productUrl = `/lightning/r/OpportunityLineItem/${row.Id}/view`; // Générer l'URL de la page de détails
     console.log(`Voici l url  ` + productUrl);
     window.open(productUrl, "_blank"); // Ouvrir dans un nouvel onglet
