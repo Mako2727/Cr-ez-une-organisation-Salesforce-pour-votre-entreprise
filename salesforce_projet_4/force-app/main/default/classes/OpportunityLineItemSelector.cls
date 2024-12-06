@@ -10,7 +10,9 @@ public with sharing class OpportunityLineItemSelector {
           UnitPrice,
           TotalPrice,
           Quantity,
-          Product2.QuantityInStock__c
+          Product2.QuantityInStock__c,
+          Product2Id,
+          SockAfterSale__c
         FROM OpportunityLineItem
         WHERE OpportunityId = :OpportunityId
       ];

@@ -39,14 +39,18 @@
   <types>
     <members>fr</members> <!-- Spécifie la langue française -->
     <name>Translations</name>
-  </types>
+  </types>  
     <types>
-    <members>Trigger_Sage_v2</members>
+    <members>Opportunity_is_updated_to_close_won</members>
     <name>Flow</name>
   </types>
     <types>
     <members>OpportunityLineItem.SockAfterSale__c</members>
     <name>CustomField</name>
+  </types>
+  <types>
+    <members>*</members>
+    <name>PermissionSet</name>
   </types>
     <version>59.0</version>
 </Package>

@@ -1,3 +1,4 @@
+import { NavigationMixin } from "lightning/navigation";
 import { LightningElement, api, wire, track } from "lwc";
 import getOpportunities from "@salesforce/apex/AccountOpportunitiesController.getOpportunities";
 import deleteOpportunity from "@salesforce/apex/AccountOpportunitiesController.deleteOpportunity";
@@ -23,8 +24,9 @@ import Warning_no_product3 from "@salesforce/label/c.Warning_no_product3";
 import Loading from "@salesforce/label/c.Loading";
 import Product_icon from "@salesforce/label/c.Product_icon";
 
-
-export default class AccountOpportunitiesViewer extends LightningElement {
+export default class AccountOpportunitiesViewer extends NavigationMixin(
+  LightningElement
+) {
   @api recordId;
   @track opportunitiesListItem;
   @track error = {};
@@ -37,7 +39,7 @@ export default class AccountOpportunitiesViewer extends LightningElement {
 
   labels = {
     labelsQuantityProblem1: Quantity_probleme_delete,
-    labelsQuantityProblem2: Quantity_probleme_delete2,    
+    labelsQuantityProblem2: Quantity_probleme_delete2,
     Opportunity_products: Opportunity_products,
     labelsWarningProduct: Warning_no_product,
     labelsWarningProduct2: Warning_no_product2,
@@ -46,12 +48,10 @@ export default class AccountOpportunitiesViewer extends LightningElement {
     labelsProduct_icon: Product_icon
   };
 
-  @wire(getRecord, { recordId: "$userId", fields: [PROFILE_NAME_FIELD] })//récupération du profil de la personne connecté
+  @wire(getRecord, { recordId: "$userId", fields: [PROFILE_NAME_FIELD] }) //récupération du profil de la personne connecté
   wiredUserRecord({ error, data }) {
     if (data) {
       this.userProfileName = data.fields.Profile.value.fields.Name.value;
-      console.log("this.Opportunity_products :", this.Opportunity_products);
-      console.log("this.userProfileName :", this.userProfileName);
     } else if (error) {
       console.error(
         "Erreur lors de la récupération du profil utilisateur :",
@@ -62,7 +62,6 @@ export default class AccountOpportunitiesViewer extends LightningElement {
 
   get columns() {
     // Définir les colonnes en fonction du profil
-    console.log("this.userProfileName = " + this.userProfileName);
     if (
       this.userProfileName === "System Administrator" ||
       this.userProfileName === "Administrateur système"
@@ -147,13 +146,11 @@ export default class AccountOpportunitiesViewer extends LightningElement {
         }
       ];
     }
-    console.log("columns opportunity=", AccountOpportunitiesViewer.columns);
     return AccountOpportunitiesViewer.columns;
   }
 
-  @wire(getOpportunities, { opportunityId: "$recordId" })//récupére l opportunitée en fonction de l id
+  @wire(getOpportunities, { opportunityId: "$recordId" }) //récupére l opportunitée en fonction de l id
   wiredOpportunities(result) {
-    
     this.wiredOpportunitiesResult = result; // Stocke le résultat
 
     const { data, error } = result;
@@ -161,11 +158,8 @@ export default class AccountOpportunitiesViewer extends LightningElement {
 
     try {
       if (data) {
-        console.log("data=", data);
         const formattedData = data.map((item) => {
-          const stockAfterOrder = item.Product2
-            ? item.Product2.QuantityInStock__c - item.Quantity
-            : null;
+          const stockAfterOrder = item.SockAfterSale__c;
           const stockStyle =
             stockAfterOrder < 0
               ? "slds-text-color_error slds-text-title_bold slds-theme_alert-texture slds-theme_shade"
@@ -185,7 +179,8 @@ export default class AccountOpportunitiesViewer extends LightningElement {
               ? item.Product2.QuantityInStock__c
               : null,
             StockAfterOrder: stockAfterOrder,
-            StockAfterOrderStyle: stockStyle
+            StockAfterOrderStyle: stockStyle,
+            ProductId: item.Product2Id
           };
         });
 
@@ -212,17 +207,10 @@ export default class AccountOpportunitiesViewer extends LightningElement {
     );
   }
 
-  get showQuantiteError() {
-    var test = this.isStockBelowZero;
-    console.log("showQuantiteError = " + test);
-    return test;
-  }
-
-  handleRowAction(event) {//récupére l evenement quand on clique sur le tableau soit delete soit view
+  handleRowAction(event) {
+    //récupére l evenement quand on clique sur le tableau soit delete soit view
     const actionName = event.detail.action.name;
     const row = event.detail.row;
-    console.log("actionName : " + actionName);
-    console.log("Event details:", event.detail);
     if (actionName === "delete") {
       this.deleteOpportunity(row);
     } else if (actionName === "view") {
@@ -233,7 +221,6 @@ export default class AccountOpportunitiesViewer extends LightningElement {
   async deleteOpportunity(row) {
     try {
       // Appeler la méthode Apex pour supprimer l'opportunité
-      console.log("row.Id :" + row.Id);
       await deleteOpportunity({ opportunityId: row.Id });
       // Mettre à jour la liste des opportunités dans le composant
       this.opportunitiesListItem = this.opportunitiesListItem.filter(
@@ -249,7 +236,8 @@ export default class AccountOpportunitiesViewer extends LightningElement {
     }
   }
 
-  showToast(title, message, variant) {//affiche un message Toast
+  showToast(title, message, variant) {
+    //affiche un message Toast
     const event = new ShowToastEvent({
       title: title,
       message: message,
@@ -259,10 +247,13 @@ export default class AccountOpportunitiesViewer extends LightningElement {
   }
 
   viewProduct(row) {
-    // Logique pour afficher le détail du produit
-    console.log(`Voici l id du produit ${row.Id} `);
-    const productUrl = `/lightning/r/OpportunityLineItem/${row.Id}/view`; // Générer l'URL de la page de détails
-    console.log(`Voici l url  ` + productUrl);
-    window.open(productUrl, "_blank"); // Ouvrir dans un nouvel onglet
+    this[NavigationMixin.Navigate]({
+      type: "standard__recordPage",
+      attributes: {
+        recordId: row.ProductId,
+        objectApiName: "Product2",
+        actionName: "view"
+      }
+    });
   }
 }

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Delete</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete</shortDescription>
+        <value>Delete</value>
+    </labels>
+    <labels>
+        <fullName>Loading</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Loading in progress</shortDescription>
+        <value>Loading...</value>
+    </labels>
+    <labels>
+        <fullName>Opportunity_products</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Opportunity products</shortDescription>
+        <value>Opportunity products</value>
+    </labels>
+    <labels>
+        <fullName>Product_Name</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Product Name</shortDescription>
+        <value>Product Name</value>
+    </labels>
+    <labels>
+        <fullName>Product_icon</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Product icon</shortDescription>
+        <value>Product icon</value>
+    </labels>
+    <labels>
+        <fullName>Quantity</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Quantity</shortDescription>
+        <value>Quantity</value>
+    </labels>
+    <labels>
+        <fullName>Quantity_in_stock</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Quantity in stock</shortDescription>
+        <value>Quantity in stock</value>
+    </labels>
+    <labels>
+        <fullName>Quantity_probleme</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Quantity probleme</shortDescription>
+        <value>Your opportunity cannot be updated
+because you have a quantity problem on
+your lines.</value>
+    </labels>
+    <labels>
+        <fullName>Quantity_probleme_delete</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Quantity probleme delete</shortDescription>
+        <value>You have at least one line with a quantity
+problem, please delete this line or reduce
+its quantity.</value>
+    </labels>
+    <labels>
+        <fullName>Quantity_probleme_delete2</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Quantity_probleme_delete2</shortDescription>
+        <value>If you absolutely need more products,
+please contact your system administrator.</value>
+    </labels>
+    <labels>
+        <fullName>See_product</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>See product</shortDescription>
+        <value>See product</value>
+    </labels>
+    <labels>
+        <fullName>Success_deleted_opportunitie</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Success deleted opportunitie</shortDescription>
+        <value>Opportunity successfully deleted</value>
+    </labels>
+    <labels>
+        <fullName>Total_Price</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Total Price</shortDescription>
+        <value>Total Price</value>
+    </labels>
+    <labels>
+        <fullName>Unit_Price</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Unit Price</shortDescription>
+        <value>Unit Price</value>
+    </labels>
+    <labels>
+        <fullName>Warning_no_product</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Warning no product</shortDescription>
+        <value>You don&apos;t have any product lines at the
+moment.</value>
+    </labels>
+    <labels>
+        <fullName>Warning_no_product2</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Warning no product2</shortDescription>
+        <value>1. First select a Catalog (Pricebook)</value>
+    </labels>
+    <labels>
+        <fullName>Warning_no_product3</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Warning no product3</shortDescription>
+        <value>2. Then select the products you wish to
+add.</value>
+    </labels>
+</CustomLabels>

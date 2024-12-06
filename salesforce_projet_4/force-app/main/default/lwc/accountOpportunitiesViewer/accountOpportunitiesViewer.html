@@ -6,9 +6,11 @@
   >
     <div class="slds-max-large-size_xx-large">
       <template if:true={isLoading}>
-        <lightning-spinner alternative-text={labels.labelsLoading}></lightning-spinner>
+        <lightning-spinner
+          alternative-text={labels.labelsLoading}
+        ></lightning-spinner>
       </template>
-      <template if:true={showQuantiteError}>
+      <template if:true={isStockBelowZero}>
         <div class="slds-clearfix">
           <div
             class="slds-notify slds-notify_alert slds-theme_warning slds-alert_warning slds-grid slds-wrap"
@@ -32,12 +34,12 @@
         >
         </lightning-datatable>
       </template>
-      <template if:false={showTable}> 
-        {labels.labelsWarningProduct} 
-      <br/>
-      {labels.labelsWarningProduct2} 
-      <br/>
-      {labels.labelsWarningProduct3} 
+      <template if:false={showTable}>
+        {labels.labelsWarningProduct}
+        <br />
+        {labels.labelsWarningProduct2}
+        <br />
+        {labels.labelsWarningProduct3}
       </template>
 
       <template if:true={error}>
